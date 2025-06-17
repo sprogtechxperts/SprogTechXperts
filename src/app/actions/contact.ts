@@ -1,10 +1,13 @@
+
 "use server";
 
 import { z } from "zod";
 
 const contactSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
+  lastName: z.string().min(2, { message: "Last name must be at least 2 characters." }),
   email: z.string().email({ message: "Invalid email address." }),
+  projectType: z.string().min(1, { message: "Please select a project type." }),
   message: z.string().min(10, { message: "Message must be at least 10 characters." }),
 });
 
@@ -25,7 +28,7 @@ export async function submitContactForm(
   if (!parsed.success) {
     const issues = parsed.error.issues.map((issue) => issue.message);
     return {
-      message: "Invalid form data.",
+      message: "Invalid form data. Please check the fields below.",
       fields: formData as Record<string, string>,
       issues,
       success: false,
@@ -51,3 +54,5 @@ export async function submitContactForm(
 
   return { message: "Your message has been sent successfully! We'll get back to you soon.", success: true };
 }
+
+    
