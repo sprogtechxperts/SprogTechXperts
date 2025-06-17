@@ -4,6 +4,7 @@
 import * as React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Figma, Gem, Cloud, Container, ShipWheel, Database as DatabaseIcon, Smartphone, Brain, Server, Palette, Settings } from "lucide-react"; // Using Palette for UI/UX, Settings for DevOps as placeholders
+import { cn } from "@/lib/utils";
 
 // Existing SVGs (React, Next.js, Node.js, Angular) with updated colors
 const reactLogo = (
@@ -85,12 +86,7 @@ const mongoDBLogo = (
 );
 
 
-// Firebase from lucide-react doesn't have a specific brand icon, using a generic one.
-// For Firebase, ensure the correct `lucide-react` import for `Firebase` or use a custom SVG if preferred.
-// For this example, I'm assuming `Firebase` from `lucide-react` works, or a placeholder.
-// If `Firebase` is not a direct export, you might need to find an alternative or use a custom SVG.
-// For now, let's assume a placeholder or a generic DatabaseIcon for simplicity if Firebase from lucide-react is not specific
-import { DatabaseZap as FirebaseIcon } from "lucide-react"; // Placeholder if actual Firebase not available
+import { DatabaseZap as FirebaseIcon } from "lucide-react";
 
 
 const technologyCategories = [
@@ -111,7 +107,7 @@ const technologyCategories = [
       { name: "Node.js", logo: nodejsLogo, dataAiHint: "Nodejs javascript" },
       { name: "Python", logo: pythonLogo, dataAiHint: "Python language" },
       { name: "Java", logo: javaLogo, dataAiHint: "Java language" },
-      { name: "PHP", logo: <Server className="h-16 w-16 text-indigo-500 transition-transform duration-300 group-hover:scale-110" />, dataAiHint: "PHP language" }, // Example
+      { name: "PHP", logo: <Server className="h-16 w-16 text-indigo-500 transition-transform duration-300 group-hover:scale-110" />, dataAiHint: "PHP language" },
     ],
   },
   {
@@ -161,15 +157,18 @@ export function TechnologiesSection() {
 
         <Tabs defaultValue="frontend" className="w-full">
           <div className="flex justify-center mb-10 md:mb-12">
-            <TabsList className="bg-red-400 dark:bg-red-500/80 p-1 rounded-full inline-flex items-center space-x-1">
+            <TabsList className="bg-muted p-1 rounded-full inline-flex items-center space-x-1">
               {technologyCategories.map((category) => (
                 <TabsTrigger
                   key={category.value}
                   value={category.value}
-                  className="px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs sm:text-sm font-medium transition-all
-                             data-[state=active]:bg-white data-[state=active]:text-red-500 data-[state=active]:shadow-md
-                             dark:data-[state=active]:bg-neutral-100 dark:data-[state=active]:text-red-600
-                             text-white dark:text-red-100 hover:bg-white/20 dark:hover:bg-white/10"
+                  className={cn(
+                    "px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors",
+                    "text-muted-foreground",
+                    "hover:text-primary",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                    "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                  )}
                 >
                   {category.name}
                 </TabsTrigger>
