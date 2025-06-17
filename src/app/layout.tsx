@@ -5,8 +5,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'SmoothTech Experts - Empowering Tomorrow’s Brands, Today',
-  description: 'Modern solutions for website development, mobile apps, e-commerce, MVP prototyping, SEO, and UI/UX design.',
+  title: 'SPROGTechXperts - Empowering Tomorrow’s Brands, Today',
+  description: 'Intelligent, high-performance digital products. From sleek web platforms to enterprise-grade software and AI-driven systems.',
 };
 
 export default function RootLayout({
