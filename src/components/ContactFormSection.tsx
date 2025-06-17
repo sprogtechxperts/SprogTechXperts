@@ -14,9 +14,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useFormState } from "react-dom";
+import { useActionState, useEffect, useState } from "react"; // Changed import
 import { submitContactForm, type ContactFormState } from "@/app/actions/contact";
-import { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,7 +41,7 @@ const initialState: ContactFormState = {
 };
 
 export function ContactFormSection() {
-  const [state, formAction] = useFormState(submitContactForm, initialState);
+  const [state, formAction] = useActionState(submitContactForm, initialState); // Changed hook name
   const [showDialog, setShowDialog] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMessage, setDialogMessage] = useState("");
