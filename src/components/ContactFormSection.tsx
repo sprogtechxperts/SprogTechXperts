@@ -49,6 +49,8 @@ type ContactFormValues = z.infer<typeof formSchema>;
 const initialState: ContactFormState = {
   message: "",
   success: false,
+  fields: undefined,
+  issues: undefined,
 };
 
 const projectTypes = [
@@ -70,31 +72,34 @@ export function ContactFormSection() {
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: { // Set to clean initial values
       firstName: "",
       lastName: "",
       email: "",
       projectType: "",
       message: "",
-      ...(state.fields || {}), // Repopulate fields if server validation fails
     },
   });
 
   useEffect(() => {
-    if (state.message) {
+    if (state.message) { // Action has completed
       if (state.success) {
         setDialogTitle("Message Sent!");
         setDialogMessage(state.message);
         setShowDialog(true);
-        form.reset({ // Reset to initial default values, not last submitted error values
+        form.reset({ 
           firstName: "",
           lastName: "",
           email: "",
           projectType: "",
           message: "",
         });
-      } else {
-        // Field-specific errors are handled by FormMessage components.
+      } else { // Error from server action
+        // Repopulate form with previous values if there were errors
+        if (state.fields) {
+          form.reset(state.fields as ContactFormValues);
+        }
+
         // Display a toast for general errors not tied to specific fields.
         if (state.message && (!state.issues || state.issues.length === 0)) {
           toast({
@@ -103,27 +108,21 @@ export function ContactFormSection() {
             variant: "destructive",
           });
         }
-        // Repopulate form with previous values if there were errors
-        if(state.fields) {
-          form.reset(state.fields as ContactFormValues);
-        }
-        // Set focus on the first field with an error, if issues are present
-        if (state.issues && state.issues.length > 0 && parsedError) {
-            const firstErrorField = parsedError.issues[0].path[0] as keyof ContactFormValues;
-            if (firstErrorField) {
+        
+        // Set focus on the first field with an error, if issues and fields are present
+        if (state.issues && state.issues.length > 0 && state.fields) {
+          const parsed = formSchema.safeParse(state.fields);
+          if (!parsed.success) {
+            const firstErrorField = parsed.error.issues[0].path[0] as keyof ContactFormValues;
+             // Check if the field ref exists in RHF's internal store of field elements
+            if (firstErrorField && typeof form.control.fieldsRef.current[firstErrorField] !== 'undefined') {
                 form.setFocus(firstErrorField);
             }
+          }
         }
       }
     }
   }, [state, form, toast]);
-  
-  // Helper to parse zod error for focusing
-  const parsedError = state.issues ? formSchema.safeParse(state.fields || {}) : null;
-  if (parsedError && !parsedError.success && state.issues && state.issues.length > 0) {
-      // This logic is now within useEffect to set focus
-  }
-
 
   return (
     <section id="contact" className="py-16 md:py-24 lg:py-32 bg-sky-50 dark:bg-slate-900">
@@ -189,7 +188,7 @@ export function ContactFormSection() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Project Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select a project type" />
