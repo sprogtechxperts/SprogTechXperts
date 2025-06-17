@@ -34,7 +34,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Send, Mail, Phone } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
@@ -66,6 +66,7 @@ export function ContactFormSection() {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMessage, setDialogMessage] = useState("");
+  const { toast } = useToast();
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(formSchema),
@@ -75,6 +76,7 @@ export function ContactFormSection() {
       email: "",
       projectType: "",
       message: "",
+      ...(state.fields || {}), // Repopulate fields if server validation fails
     },
   });
 
@@ -84,12 +86,44 @@ export function ContactFormSection() {
         setDialogTitle("Message Sent!");
         setDialogMessage(state.message);
         setShowDialog(true);
-        form.reset();
+        form.reset({ // Reset to initial default values, not last submitted error values
+          firstName: "",
+          lastName: "",
+          email: "",
+          projectType: "",
+          message: "",
+        });
       } else {
-        // Error messages are displayed by FormMessage components
+        // Field-specific errors are handled by FormMessage components.
+        // Display a toast for general errors not tied to specific fields.
+        if (state.message && (!state.issues || state.issues.length === 0)) {
+          toast({
+            title: "Submission Error",
+            description: state.message,
+            variant: "destructive",
+          });
+        }
+        // Repopulate form with previous values if there were errors
+        if(state.fields) {
+          form.reset(state.fields as ContactFormValues);
+        }
+        // Set focus on the first field with an error, if issues are present
+        if (state.issues && state.issues.length > 0 && parsedError) {
+            const firstErrorField = parsedError.issues[0].path[0] as keyof ContactFormValues;
+            if (firstErrorField) {
+                form.setFocus(firstErrorField);
+            }
+        }
       }
     }
-  }, [state, form]);
+  }, [state, form, toast]);
+  
+  // Helper to parse zod error for focusing
+  const parsedError = state.issues ? formSchema.safeParse(state.fields || {}) : null;
+  if (parsedError && !parsedError.success && state.issues && state.issues.length > 0) {
+      // This logic is now within useEffect to set focus
+  }
+
 
   return (
     <section id="contact" className="py-16 md:py-24 lg:py-32 bg-sky-50 dark:bg-slate-900">
@@ -155,7 +189,7 @@ export function ContactFormSection() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Project Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select a project type" />
@@ -252,5 +286,3 @@ export function ContactFormSection() {
     </section>
   );
 }
-
-    
