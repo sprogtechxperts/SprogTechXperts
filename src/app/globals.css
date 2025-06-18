@@ -59,32 +59,32 @@ h1, h2, h3, h4, h5, h6 {
 
   .dark {
     --background: 0 0% 20%; /* Dark Gray #333333 */
-    --foreground: 0 0% 96.1%;
+    --foreground: 0 0% 96.1%; /* #F5F5F5 */
 
-    --card: 0 0% 24%;
-    --card-foreground: 0 0% 96.1%;
+    --card: 0 0% 24%; /* #3D3D3D */
+    --card-foreground: 0 0% 96.1%; /* #F5F5F5 */
 
-    --popover: 0 0% 20%;
-    --popover-foreground: 0 0% 96.1%;
+    --popover: 0 0% 20%; /* #333333 */
+    --popover-foreground: 0 0% 96.1%; /* #F5F5F5 */
 
     --primary: 197 71% 52%; /* Vibrant Blue #29ABE2 */
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 210 40% 98%; /* #F0F8FF */
 
-    --secondary: 0 0% 27%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 0 0% 27%; /* #454545 */
+    --secondary-foreground: 0 0% 98%; /* #FAFAFA */
 
-    --muted: 0 0% 27%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted: 0 0% 27%; /* #454545 */
+    --muted-foreground: 0 0% 70%; /* #B3B3B3 - Was 63.9% */
 
-    --accent: 120 60% 70%; /* Light Green #90EE90 adjusted */
-    --accent-foreground: 120 100% 10%;
+    --accent: 120 55% 60%; /* #7ACC7A - Was 120 60% 70% */
+    --accent-foreground: 120 100% 10%; /* #003300 */
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%; /* #991B1B */
+    --destructive-foreground: 0 0% 98%; /* #FAFAFA */
 
-    --border: 0 0% 29.8%;
-    --input: 0 0% 29.8%;
-    --ring: 197 71% 52%; /* Use primary color for ring */
+    --border: 0 0% 35%; /* #595959 - Was 29.8% */
+    --input: 0 0% 35%; /* #595959 - Was 29.8% */
+    --ring: 197 71% 52%; /* Use primary color for ring #29ABE2 */
     
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
