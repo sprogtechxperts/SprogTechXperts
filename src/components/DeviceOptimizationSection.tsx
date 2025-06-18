@@ -46,7 +46,7 @@ export function DeviceOptimizationSection() {
             {/* Right Column: Image */}
             <div className="relative flex items-center justify-center mt-8 md:mt-0">
               <Image
-                src="https://placehold.co/500x350.png"
+                src="/assets/responsive.webp"
                 alt="Illustration of responsive devices: laptop, tablet, and smartphone"
                 width={500}
                 height={350}

@@ -27,7 +27,7 @@ const trustFactors = [
 
 export function TrustSection() {
   return (
-    <section id="trust" className="py-16 md:py-24 lg:py-32 bg-secondary/50 dark:bg-secondary/20">
+    <section id="trust" className="py-16 md:py-24 bg-sky-50 dark:bg-slate-800">
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-10 md:mb-12">
           <h2 className="font-headline text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">

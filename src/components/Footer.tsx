@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { MountainIcon, Mail, Phone, Instagram, Linkedin, Twitter, MessageSquare, Send } from 'lucide-react'; // Using MountainIcon as a placeholder logo
+import Image from 'next/image';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -30,10 +31,17 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {/* Column 1: Logo & Description */}
           <div className="md:col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center space-x-2 mb-4" aria-label="SPROGTechXperts Home">
-              <MountainIcon className="h-8 w-8 text-primary" />
-              <span className="font-headline text-xl font-bold text-foreground">SPROGTechXperts</span>
-            </Link>
+           <Link href="/" className="flex items-center space-x-2 mb-4" aria-label="SPROGTechXperts Home">
+  <Image
+    src="/assets/SprogTechXperts-logo.png"
+    alt="SPROGTechXperts Logo"
+    width={40}
+    height={40}
+    className="object-contain"
+    priority
+  />
+  <span className="font-headline text-xl font-bold text-foreground">SprogTechXperts</span>
+</Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               SprogTechXperts is your agile tech partner, not just another freelancing agency. We specialize in crafting high-performance websites, scalable platforms, and intelligent digital solutions. From MVPs to full-scale products, we help businesses launch smarter and grow faster.
             </p>
@@ -73,8 +81,8 @@ export function Footer() {
               <h3 className="font-headline text-lg font-semibold mb-4 text-foreground">Contact Us</h3>
               <div className="flex items-center space-x-2 mb-2">
                 <Mail className="h-4 w-4 text-muted-foreground" />
-                <a href="mailto:Sprogtechxperts@gmail.com" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Sprogtechxperts@gmail.com
+                <a href="mailto:sprogtechxperts@gmail.com" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  sprogtechxperts@gmail.com
                 </a>
               </div>
               <div className="flex items-center space-x-2">

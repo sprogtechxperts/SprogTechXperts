@@ -1,4 +1,3 @@
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,19 +21,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useActionState, useEffect, useState } from "react";
-import { submitContactForm, type ContactFormState } from "@/app/actions/contact";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Send, Mail, Phone } from "lucide-react";
+import { Mail, Phone, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import emailjs from "@emailjs/browser";
 
 const formSchema = z.object({
   firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
@@ -46,33 +36,19 @@ const formSchema = z.object({
 
 type ContactFormValues = z.infer<typeof formSchema>;
 
-const initialState: ContactFormState = {
-  message: "",
-  success: false,
-  fields: undefined,
-  issues: undefined,
-};
-
 const projectTypes = [
   "Web Development",
   "Mobile App Development",
   "E-commerce Solution",
-  "MVP Prototyping",
   "SEO & Marketing",
   "UI/UX Design",
   "Other",
 ];
 
 export function ContactFormSection() {
-  const [state, formAction] = useActionState(submitContactForm, initialState);
-  const [showDialog, setShowDialog] = useState(false);
-  const [dialogTitle, setDialogTitle] = useState("");
-  const [dialogMessage, setDialogMessage] = useState("");
-  const { toast } = useToast();
-
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { // Set to clean initial values
+    defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
@@ -81,48 +57,54 @@ export function ContactFormSection() {
     },
   });
 
-  useEffect(() => {
-    if (state.message) { // Action has completed
-      if (state.success) {
-        setDialogTitle("Message Sent!");
-        setDialogMessage(state.message);
-        setShowDialog(true);
-        form.reset({
-          firstName: "",
-          lastName: "",
-          email: "",
-          projectType: "",
-          message: "",
-        });
-      } else { // Error from server action
-        // Repopulate form with previous values if there were errors
-        if (state.fields) {
-          form.reset(state.fields as ContactFormValues);
-        }
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
 
-        // Display a toast for general errors not tied to specific fields.
-        if (state.message && (!state.issues || state.issues.length === 0)) {
-          toast({
-            title: "Submission Error",
-            description: state.message,
-            variant: "destructive",
-          });
-        }
+  const sendEmail = async (data: ContactFormValues) => {
+    setLoading(true);
+    try {
+      // Contact Notification
+      await emailjs.send(
+        "service_hrqhowg",
+        "template_s5f3bqj",
+        {
+          name: `${data.firstName} ${data.lastName}`,
+          email: data.email,
+          message: data.message,
+          projectType: data.projectType,
+        },
+        "pgXabnuGqu0o4J7rh"
+      );
 
-        // Set focus on the first field with an error, if issues and fields are present
-        if (state.issues && state.issues.length > 0 && state.fields) {
-          const parsed = formSchema.safeParse(state.fields);
-          if (!parsed.success) {
-            const firstErrorField = parsed.error.issues[0].path[0] as keyof ContactFormValues;
-             // Check if the field ref exists in RHF's internal store of field elements
-            if (firstErrorField && typeof form.control.fieldsRef.current[firstErrorField] !== 'undefined') {
-                form.setFocus(firstErrorField);
-            }
-          }
-        }
-      }
+     // Auto-reply
+await emailjs.send(
+  "service_hrqhowg", 
+  "template_xdredgr", // your auto-reply template ID
+  {
+    name: data.firstName,
+    email: data.email,
+    reply_to: data.email, 
+  },
+  "pgXabnuGqu0o4J7rh" 
+);
+
+
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for contacting us. We’ll get back to you shortly.",
+      });
+
+      form.reset();
+    } catch (error) {
+      toast({
+        title: "Submission Failed",
+        description: "Something went wrong while sending your message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-  }, [state, form, toast]);
+  };
 
   return (
     <section id="contact" className="py-16 md:py-24 lg:py-32 bg-sky-50 dark:bg-slate-900">
@@ -138,9 +120,9 @@ export function ContactFormSection() {
 
         <div className="mt-12 md:mt-16 grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
           {/* Form Section */}
-          <div className="lg:col-span-3 bg-card p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl">
+          <div className="lg:col-span-3 bg-white dark:bg-slate-800 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl">
             <Form {...form}>
-              <form action={formAction} className="space-y-6">
+              <form onSubmit={form.handleSubmit(sendEmail)} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-6">
                   <FormField
                     control={form.control}
@@ -149,7 +131,11 @@ export function ContactFormSection() {
                       <FormItem>
                         <FormLabel>First Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="John" {...field} />
+                          <Input
+                            placeholder="John"
+                            {...field}
+                            className="bg-white dark:bg-slate-700 text-black dark:text-white border border-gray-300 dark:border-slate-600"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -162,7 +148,11 @@ export function ContactFormSection() {
                       <FormItem>
                         <FormLabel>Last Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Doe" {...field} />
+                          <Input
+                            placeholder="Doe"
+                            {...field}
+                            className="bg-white dark:bg-slate-700 text-black dark:text-white border border-gray-300 dark:border-slate-600"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -176,7 +166,12 @@ export function ContactFormSection() {
                     <FormItem>
                       <FormLabel>Email Address</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="you@example.com" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="you@example.com"
+                          {...field}
+                          className="bg-white dark:bg-slate-700 text-black dark:text-white border border-gray-300 dark:border-slate-600"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -190,7 +185,7 @@ export function ContactFormSection() {
                       <FormLabel>Project Type</FormLabel>
                       <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="bg-white dark:bg-slate-700 text-black dark:text-white border border-gray-300 dark:border-slate-600">
                             <SelectValue placeholder="Select a project type" />
                           </SelectTrigger>
                         </FormControl>
@@ -215,7 +210,7 @@ export function ContactFormSection() {
                       <FormControl>
                         <Textarea
                           placeholder="Tell us about your project..."
-                          className="resize-none"
+                          className="resize-none bg-white dark:bg-slate-700 text-black dark:text-white border border-gray-300 dark:border-slate-600"
                           rows={5}
                           {...field}
                         />
@@ -224,8 +219,17 @@ export function ContactFormSection() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" size="lg" className="w-full shadow-lg hover:shadow-primary/50 transition-shadow">
-                  <Send className="mr-2 h-5 w-5" /> Send Message
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={loading}
+                  className="w-full shadow-lg hover:shadow-primary/50 transition-shadow"
+                >
+                  {loading ? "Sending..." : (
+                    <>
+                      <Send className="mr-2 h-5 w-5" /> Send Message
+                    </>
+                  )}
                 </Button>
               </form>
             </Form>
@@ -248,8 +252,8 @@ export function ContactFormSection() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-foreground">EMAIL</h4>
-                  <a href="mailto:Sprogtechxperts@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
-                    Sprogtechxperts@gmail.com
+                  <a href="mailto:sprogtechxperts@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
+                    sprogtechxperts@gmail.com
                   </a>
                 </div>
               </div>
@@ -268,22 +272,6 @@ export function ContactFormSection() {
           </div>
         </div>
       </div>
-
-      <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{dialogTitle}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {dialogMessage}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={() => setShowDialog(false)}>Close</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </section>
   );
 }
-
-    

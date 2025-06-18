@@ -1,7 +1,7 @@
 
 export function AboutSection() {
   return (
-    <section id="about" className="py-16 md:py-24 lg:py-32 bg-background">
+    <section id="about" className="py-16 md:py-24 lg:py-32 bg-slate-50 dark:bg-slate-900">
       <div className="container mx-auto px-4 md:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h3 className="font-headline text-xl font-medium text-foreground sm:text-2xl md:text-3xl">

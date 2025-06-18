@@ -5,8 +5,43 @@ import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'SPROGTechXperts - Empowering Tomorrow’s Brands, Today',
-  description: 'Intelligent, high-performance digital products. From sleek web platforms to enterprise-grade software and AI-driven systems.',
+  metadataBase: new URL('https://www.sprogtechxperts.com'), // ✅ Add this line
+
+  title: 'SprogTechXperts - Empowering Tomorrow’s Brands, Today',
+  description:
+    'Intelligent, high-performance digital products. From sleek web platforms to enterprise-grade software and AI-driven systems.',
+  keywords: [
+    'SprogTechXperts',
+    'Web Development',
+    'AI Solutions',
+    'Digital Products',
+    'Software Development',
+  ],
+  icons: {
+    icon: '/assets/SprogTechXperts-logo.png', // ✅ Your logo as favicon
+  },
+  openGraph: {
+    title: 'SprogTechXperts',
+    description: 'Empowering Tomorrow’s Brands with next-gen digital products.',
+    url: 'https://www.sprogtechxperts.com',
+    siteName: 'SPROGTechXperts',
+    images: [
+      {
+        url: '/assets/SprogTechXperts-logo.png', // ✅ Relative path okay now with metadataBase
+        width: 600,
+        height: 600,
+        alt: 'SPROGTechXperts Logo',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SprogTechXperts',
+    description: 'Next-gen digital platforms & enterprise-grade software.',
+    images: ['/assets/SprogTechXperts-logo.png'],
+    creator: '@sprogtechxperts',
+  },
 };
 
 export default function RootLayout({
@@ -17,6 +52,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Favicon fallback */}
+        <link rel="icon" type="image/png" href="/assets/SprogTechXperts-logo.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />

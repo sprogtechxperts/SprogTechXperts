@@ -5,7 +5,7 @@ import { TrustSection } from "@/components/TrustSection";
 import { ServicesSection } from "@/components/ServicesSection";
 import { DeviceOptimizationSection } from "@/components/DeviceOptimizationSection";
 import { TechnologiesSection } from "@/components/TechnologiesSection";
-import { WorkflowSection } from "@/components/WorkflowSection";
+// import { WorkflowSection } from "@/components/WorkflowSection";
 import { ContactFormSection } from "@/components/ContactFormSection";
 import { Footer } from "@/components/Footer";
 
@@ -20,7 +20,7 @@ export default function HomePage() {
         <ServicesSection />
         <DeviceOptimizationSection />
         <TechnologiesSection />
-        <WorkflowSection />
+        {/* <WorkflowSection /> */}
         <ContactFormSection />
       </main>
       <Footer />
