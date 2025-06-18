@@ -1,7 +1,7 @@
 
 'use client'
 
-import React from 'react'; // Added import
+import React from 'react';
 import {
   Search,
   LayoutGrid,
@@ -16,7 +16,7 @@ import {
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import type { ReactNode } from 'react'; // Changed from `type React` to `type { ReactNode }`
+import type { ReactNode } from 'react';
 
 interface StepProps {
   icon: ReactNode
@@ -91,7 +91,7 @@ const StepContainer: React.FC<StepProps & { children?: ReactNode }> = ({
 }
 
 const HorizontalArrow: React.FC<{ className?: string; reverse?: boolean }> = ({ className, reverse = false }) => (
-  <div className={cn("flex-grow flex items-center justify-center mx-1 my-4 md:my-0 md:mx-2", className)}> {/* Adjusted margin for mobile stacking */}
+  <div className={cn("flex-grow flex items-center justify-center mx-1 my-4 md:my-0 md:mx-2", className)}>
     <ArrowRight className={cn("w-6 h-6 md:w-8 md:h-8 text-gray-400 dark:text-gray-500", reverse && "transform rotate-180")} />
   </div>
 )
@@ -163,6 +163,10 @@ const workflowSteps = [
 ]
 
 export function WorkflowSection() {
+  // Style for the main step containers in the desktop diagram
+  const desktopStepBaseClasses = "flex flex-col items-center md:basis-1/3 p-2"; // Ensures equal basis for 3 items per row
+  const desktopStepInnerClasses = "w-full max-w-[220px] lg:max-w-[250px]"; // Control width of individual step content
+
   return (
     <section id="workflow" className="py-16 md:py-24 lg:py-32 bg-slate-50 dark:bg-slate-900">
       <div className="container mx-auto px-4 md:px-6">
@@ -176,47 +180,69 @@ export function WorkflowSection() {
         </div>
 
         {/* Desktop Workflow Diagram */}
-        <div className="hidden md:block mb-16 --step-width:10rem; lg:--step-width:12rem;"> {/* Custom property for alignment assist */}
+        <div className="hidden md:block mb-16">
           {/* Row 1: Steps 1-2-3 */}
-          <div className="flex flex-col md:flex-row justify-around items-center md:items-start mb-4 md:mb-0">
-            <StepContainer {...workflowSteps[0]} number={1} />
-            <HorizontalArrow className="hidden md:flex" />
-            <VerticalArrow className="md:hidden" />
-            <StepContainer {...workflowSteps[1]} number={2} />
-            <HorizontalArrow className="hidden md:flex" />
-            <VerticalArrow className="md:hidden" />
-            <StepContainer {...workflowSteps[2]} number={3} />
+          <div className="flex justify-between items-start mb-4 md:mb-8">
+            <div className={cn(desktopStepBaseClasses, "items-center md:items-start")}>
+              <div className={desktopStepInnerClasses}>
+                <StepContainer {...workflowSteps[0]} number={1} />
+              </div>
+            </div>
+            <HorizontalArrow className="hidden md:flex self-center mt-8" /> {/* Self-center for arrow */}
+            <div className={cn(desktopStepBaseClasses, "items-center")}>
+              <div className={desktopStepInnerClasses}>
+                <StepContainer {...workflowSteps[1]} number={2} />
+              </div>
+            </div>
+            <HorizontalArrow className="hidden md:flex self-center mt-8" />
+            <div className={cn(desktopStepBaseClasses, "items-center md:items-end")}>
+              <div className={desktopStepInnerClasses}>
+                <StepContainer {...workflowSteps[2]} number={3} />
+              </div>
+            </div>
           </div>
 
           {/* Connector from Step 3 down to Step 4 area */}
-          <div className="flex justify-end">
-             <div className="w-full md:w-1/3 flex justify-center md:justify-end md:pr-[calc(var(--step-width,10rem)/2_-_1rem)] lg:pr-[calc(var(--step-width,12rem)/2_-_1.25rem)]"> {/* Alignment helper */}
+          <div className="flex justify-end mb-4 md:mb-8">
+            <div className="basis-1/3 flex justify-center"> {/* Match step width for alignment */}
               <VerticalArrow />
             </div>
           </div>
           
-          {/* Row 2: Steps 6-5-4 (visually as 4-5-6 with correct arrows) */}
-          <div className="flex flex-col-reverse md:flex-row justify-around items-center md:items-start mb-4 md:mb-0">
-            <StepContainer {...workflowSteps[5]} number={6} />
-            <HorizontalArrow className="hidden md:flex" reverse={true}/>
-            <VerticalArrow className="md:hidden transform rotate-180" /> {/* Pointing up for mobile flow */}
-            <StepContainer {...workflowSteps[4]} number={5} />
-            <HorizontalArrow className="hidden md:flex" reverse={true}/>
-            <VerticalArrow className="md:hidden transform rotate-180" /> {/* Pointing up for mobile flow */}
-            <StepContainer {...workflowSteps[3]} number={4} />
+          {/* Row 2: Steps 6-5-4 (Visually 4-5-6, order in array is 5,4,3 for data) */}
+          <div className="flex justify-between items-start mb-4 md:mb-8 flex-row-reverse md:flex-row">
+             <div className={cn(desktopStepBaseClasses, "items-center md:items-start")}>
+                <div className={desktopStepInnerClasses}>
+                    <StepContainer {...workflowSteps[5]} number={6} />
+                </div>
+            </div>
+            <HorizontalArrow className="hidden md:flex self-center mt-8" reverse={true} />
+            <div className={cn(desktopStepBaseClasses, "items-center")}>
+                <div className={desktopStepInnerClasses}>
+                    <StepContainer {...workflowSteps[4]} number={5} />
+                </div>
+            </div>
+            <HorizontalArrow className="hidden md:flex self-center mt-8" reverse={true} />
+             <div className={cn(desktopStepBaseClasses, "items-center md:items-end")}>
+                <div className={desktopStepInnerClasses}>
+                    <StepContainer {...workflowSteps[3]} number={4} />
+                </div>
+            </div>
           </div>
           
-          {/* Connector from Step 4 (visually left-most in second row on desktop) down to Step 7 area */}
-           <div className="flex justify-start">
-             <div className="w-full md:w-1/3 flex justify-center md:justify-start md:pl-[calc(var(--step-width,10rem)/2_-_1rem)] lg:pl-[calc(var(--step-width,12rem)/2_-_1.25rem)]"> {/* Alignment helper */}
+          {/* Connector from Step 4 (visually left-most in second row) down to Step 7 */}
+           <div className="flex justify-start mb-4 md:mb-8">
+             <div className="basis-1/3 flex justify-center">  {/* Match step width for alignment */}
                  <VerticalArrow />
              </div>
            </div>
 
-          {/* Row 3: Step 7 (aligned under Step 4 on desktop) */}
+          {/* Row 3: Step 7 (Aligned under Step 4 on desktop) */}
           <div className="flex justify-start">
-             <div className="w-full md:w-1/3 flex justify-center md:justify-start md:pl-[calc(var(--step-width,10rem)/2_-_1rem)] lg:pl-[calc(var(--step-width,12rem)/2_-_1.25rem)]"> {/* Alignment helper */}
+             <div className={cn(desktopStepBaseClasses, "items-center md:items-start")}>  {/* Match step width for alignment */}
+               <div className={desktopStepInnerClasses}>
                 <StepContainer {...workflowSteps[6]} number={7} />
+                </div>
              </div>
           </div>
         </div>

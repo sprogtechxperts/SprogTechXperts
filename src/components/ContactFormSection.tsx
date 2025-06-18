@@ -87,7 +87,7 @@ export function ContactFormSection() {
         setDialogTitle("Message Sent!");
         setDialogMessage(state.message);
         setShowDialog(true);
-        form.reset({ 
+        form.reset({
           firstName: "",
           lastName: "",
           email: "",
@@ -108,7 +108,7 @@ export function ContactFormSection() {
             variant: "destructive",
           });
         }
-        
+
         // Set focus on the first field with an error, if issues and fields are present
         if (state.issues && state.issues.length > 0 && state.fields) {
           const parsed = formSchema.safeParse(state.fields);
@@ -285,3 +285,5 @@ export function ContactFormSection() {
     </section>
   );
 }
+
+    
