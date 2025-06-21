@@ -1,277 +1,199 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion } from "framer-motion";
+import { Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Mail, Phone, Send } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
-import emailjs from "@emailjs/browser";
-
-const formSchema = z.object({
-  firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
-  lastName: z.string().min(2, { message: "Last name must be at least 2 characters." }),
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  projectType: z.string().min(1, { message: "Please select a project type." }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters long." }),
-});
-
-type ContactFormValues = z.infer<typeof formSchema>;
-
-const projectTypes = [
-  "Web Development",
-  "Mobile App Development",
-  "E-commerce Solution",
-  "SEO & Marketing",
-  "UI/UX Design",
-  "Other",
-];
 
 export function ContactFormSection() {
-  const form = useForm<ContactFormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      projectType: "",
-      message: "",
-    },
-  });
+  const formRef = useRef(null);
+  const infoRef = useRef(null);
 
-  const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
-
-  const sendEmail = async (data: ContactFormValues) => {
-    setLoading(true);
-    try {
-      // Contact Notification
-      await emailjs.send(
-        "service_hrqhowg",
-        "template_s5f3bqj",
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        formRef.current,
+        { opacity: 0, y: 60 },
         {
-          name: `${data.firstName} ${data.lastName}`,
-          email: data.email,
-          message: data.message,
-          projectType: data.projectType,
-        },
-        "pgXabnuGqu0o4J7rh"
+          opacity: 1,
+          y: 0,
+          duration: 1.4,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: formRef.current,
+            start: "top 85%",
+          },
+        }
       );
 
-     // Auto-reply
-await emailjs.send(
-  "service_hrqhowg", 
-  "template_xdredgr", // your auto-reply template ID
-  {
-    name: data.firstName,
-    email: data.email,
-    reply_to: data.email, 
-  },
-  "pgXabnuGqu0o4J7rh" 
-);
+      gsap.fromTo(
+        infoRef.current,
+        { opacity: 0, x: 80 },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 1.3,
+          delay: 0.4,
+          ease: "power4.out",
+          scrollTrigger: {
+            trigger: infoRef.current,
+            start: "top 90%",
+          },
+        }
+      );
+    }, formRef);
 
-
-      toast({
-        title: "Message Sent!",
-        description: "Thank you for contacting us. We’ll get back to you shortly.",
-      });
-
-      form.reset();
-    } catch (error) {
-      toast({
-        title: "Submission Failed",
-        description: "Something went wrong while sending your message. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section id="contact" className="py-16 md:py-24 lg:py-32 bg-sky-50 dark:bg-slate-900">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="text-center mb-10 md:mb-12">
-          <h3 className="font-headline text-lg text-muted-foreground sm:text-xl">
-            Get In Touch
-          </h3>
-          <h2 className="font-headline text-3xl font-bold tracking-tight text-purple-600 dark:text-purple-400 sm:text-4xl md:text-5xl mt-1">
-            Let’s Start Your Project
+    <section
+      id="contact"
+      className="relative py-16 bg-gradient-to-br from-white via-blue-50 to-sky-100 dark:from-[#050d27] dark:via-[#0c1a3c] dark:to-[#0b162e] transition-colors duration-500 overflow-hidden"
+    >
+       <h2 className="font-headline pb-6 text-4xl text-center w-full md:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+            Contact{" "}
+            <span className="text-indigo-500 dark:text-indigo-400">
+              US
+            </span>
           </h2>
-        </div>
+      <motion.div
+        className="absolute inset-0 z-0 bg-[url('/stars.svg')] bg-cover opacity-10 dark:opacity-20 pointer-events-none"
+        animate={{ backgroundPositionY: ["0%", "100%"] }}
+        transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
+      />
 
-        <div className="mt-12 md:mt-16 grid lg:grid-cols-5 gap-8 lg:gap-12 items-start">
-          {/* Form Section */}
-          <div className="lg:col-span-3 bg-white dark:bg-slate-800 p-6 sm:p-8 md:p-10 rounded-2xl shadow-xl">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(sendEmail)} className="space-y-6">
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <FormField
-                    control={form.control}
-                    name="firstName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>First Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="John"
-                            {...field}
-                            className="bg-white dark:bg-slate-700 text-black dark:text-white border border-gray-300 dark:border-slate-600"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="lastName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Last Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Doe"
-                            {...field}
-                            className="bg-white dark:bg-slate-700 text-black dark:text-white border border-gray-300 dark:border-slate-600"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email Address</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="email"
-                          placeholder="you@example.com"
-                          {...field}
-                          className="bg-white dark:bg-slate-700 text-black dark:text-white border border-gray-300 dark:border-slate-600"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="projectType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Project Type</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="bg-white dark:bg-slate-700 text-black dark:text-white border border-gray-300 dark:border-slate-600">
-                            <SelectValue placeholder="Select a project type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {projectTypes.map((type) => (
-                            <SelectItem key={type} value={type}>
-                              {type}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Message</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Tell us about your project..."
-                          className="resize-none bg-white dark:bg-slate-700 text-black dark:text-white border border-gray-300 dark:border-slate-600"
-                          rows={5}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled={loading}
-                  className="w-full shadow-lg hover:shadow-primary/50 transition-shadow"
-                >
-                  {loading ? "Sending..." : (
-                    <>
-                      <Send className="mr-2 h-5 w-5" /> Send Message
-                    </>
-                  )}
-                </Button>
-              </form>
-            </Form>
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0.1 }}
+        animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.3, 0.2] }}
+        transition={{ duration: 12, repeat: Infinity }}
+        className="absolute -top-20 left-1/2 -translate-x-1/2 blur-3xl opacity-30 dark:opacity-20 z-0"
+      >
+        <div className="h-[600px] w-[600px] rounded-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-500 via-indigo-500 to-transparent" />
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col lg:flex-row gap-10 z-10 relative">
+        {/* Contact Form on Left */}
+
+                <motion.div
+          ref={infoRef}
+          className="w-full lg:w-1/2 space-y-6 flex flex-col justify-center"
+        >
+          <div>
+            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">
+             Get In Touch
+            </h2>
+            <p className="text-5xl font-bold text-indigo-600 dark:text-purple-400">
+              Let's Start Your Project
+            </p>
+            <h3 className="mt-6 text-2xl font-bold text-gray-900 dark:text-white">
+              Your Vision, Our Commitment
+            </h3>
+            <p className="mt-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+             We understand the trust it takes to hand over your dream project — and we don’t take it lightly. Every project we touch is built with care, communication, and cutting-edge code.
+            </p>
           </div>
 
-          {/* Info Section */}
-          <div className="lg:col-span-2 space-y-8 mt-8 lg:mt-0">
-            <div>
-              <h3 className="font-headline text-2xl font-bold text-foreground mb-3">
-                Your Vision, Our Commitment
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                We understand the trust it takes to hand over your dream project — and we don’t take it lightly. Every project we touch is built with care, communication, and cutting-edge code.
-              </p>
-            </div>
-            <div className="space-y-6">
-              <div className="flex items-start space-x-4">
-                <div className="bg-primary/10 text-primary p-3 rounded-full mt-1">
-                  <Mail className="h-6 w-6" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-foreground">EMAIL</h4>
-                  <a href="mailto:sprogtechxperts@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
-                    sprogtechxperts@gmail.com
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-start space-x-4">
-                <div className="bg-primary/10 text-primary p-3 rounded-full mt-1">
-                  <Phone className="h-6 w-6" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-foreground">CONTACT</h4>
-                  <a href="tel:+917841034250" className="text-muted-foreground hover:text-primary transition-colors">
-                    +91 78410 34250
-                  </a>
-                </div>
+          {[{ icon: <Mail size={20} />, title: "EMAIL", text: "sprogtechxperts@gmail.com", delay: 0 }, { icon: <Phone size={20} />, title: "PHONE", text: "+91 78410 34250", delay: 0.3 }].map((info, i) => (
+            <div className="flex items-center gap-4" key={i}>
+              <motion.div
+                animate={{ y: [0, -5, 0] }}
+                transition={{ repeat: Infinity, duration: 2, delay: info.delay }}
+                className="p-3 bg-gradient-to-tr from-indigo-600 to-purple-600 text-white rounded-xl shadow-lg"
+              >
+                {info.icon}
+              </motion.div>
+              <div>
+                <p className="font-semibold text-gray-900 dark:text-white">{info.title}</p>
+                <p className="text-sm text-gray-800 dark:text-gray-300">{info.text}</p>
               </div>
             </div>
-          </div>
-        </div>
+          ))}
+        </motion.div>
+       
+
+        {/* Info Section on Right */}
+ <motion.div
+          ref={formRef}
+          className="w-full lg:w-1/2 bg-white dark:bg-zinc-900/80 p-10 rounded-3xl shadow-xl backdrop-blur-lg border border-zinc-200 dark:border-indigo-700"
+        >
+          <form className="space-y-6">
+            <div className="flex gap-4 flex-col sm:flex-row">
+              <FloatingInput label="First Name" />
+              <FloatingInput label="Last Name" />
+            </div>
+
+            <FloatingInput label="Email Address" type="email" />
+            <SelectInput />
+            <FloatingTextarea label="Message" />
+
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full text-lg font-semibold bg-gradient-to-r from-fuchsia-600 to-indigo-600 hover:from-fuchsia-700 hover:to-indigo-700 text-white rounded-xl py-4 shadow-xl transition-transform transform hover:scale-105"
+            >
+              Send Message 
+            </Button>
+          </form>
+        </motion.div>
       </div>
     </section>
+  );
+}
+
+type FloatingInputProps = {
+  label: string;
+  type?: string;
+};
+
+function FloatingInput({ label, type = "text" }: FloatingInputProps) {
+  return (
+    <div className="relative w-full">
+      <input
+        type={type}
+        placeholder=" "
+        className="peer w-full px-4 py-3 rounded-md border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+      />
+      <label className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 text-xs transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs">
+        {label}
+      </label>
+    </div>
+  );
+}
+
+function SelectInput() {
+  return (
+    <div className="relative w-full">
+      <select
+        className="peer w-full px-4 py-3 rounded-md border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+        defaultValue=""
+      >
+        <option value="" disabled>
+          Select a Service
+        </option>
+        <option>Web Development</option>
+        <option>Mobile App</option>
+        <option>UI/UX Design</option>
+        <option>AI/ML Project</option>
+      </select>
+    </div>
+  );
+}
+
+function FloatingTextarea({ label }: { label: string }) {
+  return (
+    <div className="relative w-full">
+      <textarea
+        placeholder=" "
+        rows={4}
+        className="peer w-full px-4 py-3 rounded-md border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+      ></textarea>
+      <label className="absolute left-4 top-3 text-gray-500 dark:text-gray-400 text-xs transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs">
+        {label}
+      </label>
+    </div>
   );
 }

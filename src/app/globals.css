@@ -3,12 +3,16 @@
 @tailwind utilities;
 
 body {
-  font-family: var(--font-pt-sans), sans-serif; /* Default body font */
+  font-family: var(--font-pt-sans), sans-serif;
+  margin: 0;
+  padding: 0;
+ box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-poppins), sans-serif; /* Headline font */
 }
+
 
 @layer base {
   :root {
@@ -113,7 +117,71 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
+
 /* For smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+.cursor-bubble {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(4px);
+  z-index: 9999;
+  opacity: 0.8;
+  transform: translate(-50%, -50%);
+}
+
+.rain-container {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.raindrop {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+  filter: blur(1px);
+  border-radius: 2px;
+  animation: fall linear infinite;
+}
+
+.dark .raindrop {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+}
+
+
+/* Light Mode Selection */
+::selection {
+  background-color: #c7d2fe; /* indigo-200 */
+  color: #1e1b4b;            /* text-indigo-950 */
+}
+
+/* Dark Mode Selection */
+.dark ::selection {
+  background-color: #312e81; /* indigo-800 */
+  color: #e0e7ff;            /* text-indigo-100 */
+}
+

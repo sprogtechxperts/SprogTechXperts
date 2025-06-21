@@ -3,6 +3,8 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
+import CursorSparkle from '@/components/CursorSparkle';
+import RainBackground from '@/components/RainBackground';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.sprogtechxperts.com'), // ✅ Add this line
@@ -66,6 +68,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <CursorSparkle/>
+          <RainBackground/>
           {children}
           <Toaster />
         </ThemeProvider>

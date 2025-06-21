@@ -17,7 +17,14 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+        {
+        protocol: 'https',
+        hostname: 'ghushineindia.com',
+        port: '',        
+        pathname: '/**', 
+      },
     ],
+    
   },
   allowedDevOrigins: [
     'https://6000-firebase-studio-1750158748599.cluster-fdkw7vjj7bgguspe3fbbc25tra.cloudworkstations.dev',
@@ -25,6 +32,7 @@ const nextConfig: NextConfig = {
   experimental: {
     // Any other experimental flags would go here
   },
+
 };
 
 export default nextConfig;
