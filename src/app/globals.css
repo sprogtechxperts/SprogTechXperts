@@ -161,8 +161,8 @@ html {
   top: 0;
   width: 2px;
   height: 40px;
-  background: rgba(0, 0, 0, 0.1);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+  background: rgb(255, 255, 255);
+  background: linear-gradient(to bottom, rgb(210, 205, 205), transparent);
   filter: blur(1px);
   border-radius: 2px;
   animation: fall linear infinite;
