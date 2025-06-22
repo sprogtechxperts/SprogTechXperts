@@ -162,27 +162,34 @@ export function TechnologiesSection() {
 
         <Tabs defaultValue="frontend" className="w-full" ref={tabRef}>
           <motion.div
-            className="w-full overflow-x-auto scrollbar-hide mb-10 flex justify-center"
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            className="w-full mb-6 overflow-x-auto scrollbar-hide"
+            initial={{ opacity: 0, x: -100 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <TabsList className="flex gap-2 px-3 py-6 md:py-7 bg-muted rounded-full max-w-full sm:max-w-fit mx-auto">
-              {technologyCategories.map((category) => (
-                <TabsTrigger
-                  key={category.value}
-                  value={category.value}
-                  className={cn(
-                    "px-2 py-2 md:px-3 md:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors whitespace-nowrap",
-                    "text-muted-foreground hover:text-primary",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                    "data-[state=active]:bg-purple-600 data-[state=active]:text-white dark:data-[state=active]:bg-purple-500"
-                  )}
-                >
-                  {category.name}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+            <div className="min-w-max flex justify-center">
+              <TabsList
+                className={cn(
+                  "flex gap-2 py-4 md:py-6 bg-muted rounded-full px-4",
+                  "whitespace-nowrap"
+                )}
+              >
+                {technologyCategories.map((category) => (
+                  <TabsTrigger
+                    key={category.value}
+                    value={category.value}
+                    className={cn(
+                      "px-3 py-2 md:px-4 md:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors whitespace-nowrap",
+                      "text-muted-foreground hover:text-primary",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                      "data-[state=active]:bg-purple-600 data-[state=active]:text-white dark:data-[state=active]:bg-purple-500"
+                    )}
+                  >
+                    {category.name}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
           </motion.div>
 
           {technologyCategories.map((category, catIndex) => (

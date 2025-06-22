@@ -62,7 +62,7 @@ export function Header() {
       className="fixed top-0 z-50 w-full border-b bg-gradient-to-br from-slate-100 via-slate-50 to-slate-200 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 backdrop-blur-lg border-border shadow-md"
     >
       <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2" aria-label="SprogTechXperts Home">
+        <Link href="/" className="flex items-center" aria-label="SprogTechXperts Home">
           <div className="relative w-10 h-10">
             <Image
               src="/assets/SprogTechXperts-logo.png"

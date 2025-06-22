@@ -135,44 +135,6 @@ html {
   scrollbar-width: none;
 }
 
-
-.cursor-bubble {
-  position: fixed;
-  width: 20px;
-  height: 20px;
-  pointer-events: none;
-  border-radius: 50%;
-  filter: blur(4px);
-  z-index: 9999;
-  opacity: 0.8;
-  transform: translate(-50%, -50%);
-}
-
-.rain-container {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.raindrop {
-  position: absolute;
-  top: 0;
-  width: 2px;
-  height: 40px;
-  background: rgb(255, 255, 255);
-  background: linear-gradient(to bottom, rgb(210, 205, 205), transparent);
-  filter: blur(1px);
-  border-radius: 2px;
-  animation: fall linear infinite;
-}
-
-.dark .raindrop {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
-}
-
-
 /* Light Mode Selection */
 ::selection {
   background-color: #c7d2fe; /* indigo-200 */

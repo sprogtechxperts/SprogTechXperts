@@ -87,7 +87,7 @@ export function HeroSection() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative isolate w-full overflow-hidden py-10 sm:py-2 lg:py-16 bg-gradient-to-br from-[#eef2ff] via-[#e0f2fe] to-[#f5faff] dark:from-[#0a0f2b] dark:via-[#0c1a3c] dark:to-[#0b162e] transition-colors duration-500"
+      className="relative isolate w-full h-screen flex items-center justify-center overflow-hidden py-10 sm:py-2 lg:py-16 bg-gradient-to-br from-[#eef2ff] via-[#e0f2fe] to-[#f5faff] dark:from-[#0a0f2b] dark:via-[#0c1a3c] dark:to-[#0b162e] transition-colors duration-500"
     >
       {/* 🌐 Animated Glow Ball */}
       <motion.div
@@ -146,36 +146,7 @@ export function HeroSection() {
             ))}
           </div>
 
-          {/* ✅ GitHub-style Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            viewport={{ once: true }}
-            className="relative mt-8 mx-auto max-w-2xl rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-white/10 shadow-lg px-6 py-4 font-mono text-sm text-left"
-          >
-            <div className="flex items-center gap-2 text-green-500 font-semibold">
-              <span>✅</span>
-              <span>Pull Request Merged Successfully</span>
-            </div>
-            <p className="mt-2 text-gray-800 dark:text-gray-200">
-              Branch: <span className="text-indigo-500">main</span>
-            </p>
-            <p className="text-gray-700 dark:text-gray-400">
-              Commit: <code className="text-indigo-500">e4c3a92</code>
-            </p>
-            <p className="text-gray-700 dark:text-gray-400">
-              Message: <em>"feat: Empower developers at scale."</em>
-            </p>
-            <motion.p
-              className="mt-1 text-blue-500 dark:text-blue-400"
-              animate={{ opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: 2.5, repeat: Infinity }}
-            >
-              🔁 Deployed at: https://sprogtech.vercel.app
-            </motion.p>
-          </motion.div>
-
+    
           {/* 🚀 CTA Button */}
           <motion.div
             className="mt-6 flex items-center justify-center"

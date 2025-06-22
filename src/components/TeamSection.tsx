@@ -4,7 +4,6 @@ import { useEffect, useRef, MouseEvent } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
-import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -14,8 +13,6 @@ type TeamMember = {
   role: string;
   image: string;
   bio: string;
-  linkedin: string;
-  github?: string;
 };
 
 const teamMembers: TeamMember[] = [
@@ -24,55 +21,42 @@ const teamMembers: TeamMember[] = [
     role: "Founder & Lead Software Developer",
     image: "/assets/sandhya_Shinde.jpg",
     bio: "A tech visionary who crafts scalable systems with an eye for clean code and thoughtful design, guiding the team toward innovation with strategic insight and passion.",
-    linkedin: "https://www.linkedin.com/in/sandhya-shinde-03b710267/",
   },
   {
     name: "Omkar Gaikwad",
     role: "Software Developer & UI/UX Designer",
     image: "https://ghushineindia.com/home/wp-content/uploads/2024/12/dummy-profile.png",
     bio: "Brings precision to both logic and layout, seamlessly weaving robust APIs with engaging, user-centric designs that elevate digital experiences.",
-    linkedin: "#",
-    github: "#",
   },
   {
     name: "Vishwas Landge",
     role: "Software Developer",
     image: "https://ghushineindia.com/home/wp-content/uploads/2024/12/dummy-profile.png",
     bio: "Specializes in building secure, resilient backend foundations that scale effortlessly, while continuously streamlining processes and modernizing legacy challenges.",
-    linkedin: "#",
-    github: "#",
   },
   {
     name: "Aves Solanki",
     role: "Software Developer",
     image: "https://ghushineindia.com/home/wp-content/uploads/2024/12/dummy-profile.png",
     bio: "A versatile problem solver with a keen focus on backend architecture, delivering efficient, elegant solutions while adapting fluidly across development layers.",
-    linkedin: "#",
-    github: "#",
   },
   {
     name: "Rushikesh Unge",
     role: "Software Developer",
     image: "/assets/rushi_unge.jpg",
     bio: "Bridges creative ideas with technical execution, excelling in backend development while maintaining a versatile grasp on the wider software landscape.",
-    linkedin: "https://www.linkedin.com/in/rushi-unge",
-    github: "https://github.com/Rushi-Unge",
   },
   {
     name: "Suraj Shinde",
     role: "Software Developer",
     image: "/assets/suraj_shinde.jpg",
     bio: "Focuses on delivering polished frontend experiences backed by a deep understanding of scalable architectures and the intricacies behind the scenes.",
-    linkedin: "https://www.linkedin.com/in/surajshinde87",
-    github: "https://github.com/surajshinde87",
   },
   {
     name: "Mansi Unge",
     role: "Software Developer & UI/UX Designer",
     image: "/assets/mansi.png",
     bio: "Transforms abstract concepts into intuitive interfaces, with a strong foundation in front-end craftsmanship complemented by a broad understanding of the development ecosystem.",
-    linkedin: "https://www.linkedin.com/in/mansi-unge-8825ba312",
-    github: "https://github.com/Mansi-unge",
   },
 ];
 
@@ -155,13 +139,10 @@ export function TeamSection() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div id="team-title" className="text-center mb-6 max-w-3xl mx-auto">
           <h2 className="text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-            The{" "}
-            <span className="text-indigo-500 dark:text-indigo-400">Minds</span>{" "}
-            Behind the Code
+            The <span className="text-indigo-500 dark:text-indigo-400">Minds</span> Behind the Code
           </h2>
           <p className="mt-6 text-gray-700 dark:text-gray-300 max-w-2xl mx-auto text-lg leading-relaxed font-medium">
-            Not just devs — creators of systems, artists of logic, and
-            architects of user joy.
+            Not just devs — creators of systems, artists of logic, and architects of user joy.
           </p>
         </div>
 
@@ -169,81 +150,47 @@ export function TeamSection() {
           {teamMembers.map((member, i) => {
             const isFounder = member.name === "Sandhya Shinde";
 
-            const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              const { rotateX, rotateY } = calcTilt(e.clientX, e.clientY, rect);
-              e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-            };
-
-            const handleMouseLeave = (e: MouseEvent<HTMLDivElement>) => {
-              e.currentTarget.style.transform =
-                "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
-            };
-
             const commonProps = {
               ref: (el: HTMLDivElement | null) => {
                 if (el) cardRefs.current[i] = el;
               },
               onMouseMove: (e: MouseEvent<HTMLDivElement>) => {
                 const rect = e.currentTarget.getBoundingClientRect();
-                const { rotateX, rotateY } = calcTilt(
-                  e.clientX,
-                  e.clientY,
-                  rect
-                );
+                const { rotateX, rotateY } = calcTilt(e.clientX, e.clientY, rect);
                 e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.015)`;
               },
               onMouseLeave: (e: MouseEvent<HTMLDivElement>) => {
-                e.currentTarget.style.transform =
-                  "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+                e.currentTarget.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
               },
-
               className:
                 "group bg-white dark:bg-zinc-900 border border-indigo-100 dark:border-indigo-800/40 backdrop-blur-md rounded-3xl shadow-md hover:shadow-indigo-300/40 dark:hover:shadow-indigo-700/50 transition-transform duration-300 hover:ring-2 hover:ring-purple-400/40 dark:hover:ring-purple-500/30",
             };
 
             if (isFounder) {
               return (
-              <motion.div
-  key={member.name}
-  {...commonProps}
-  className={`col-span-full p-6 md:flex md:items-start gap-6 ${commonProps.className}`}
->
-  <div className="relative w-40 h-40 flex-shrink-0 mx-auto md:mx-0 rounded-full overflow-hidden">
-    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-400 via-sky-400 to-purple-400 opacity-50 blur-xl animate-pulse-slow group-hover:opacity-80 transition-opacity duration-500" />
-    <Image
-      src={member.image}
-      alt={member.name}
-      fill
-      className="relative z-10 object-cover rounded-full border-4 border-white dark:border-zinc-900 shadow-lg"
-      priority
-    />
-  </div>
-
-  <div className="mt-6 md:mt-0 text-center md:text-left">
-    <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
-      {member.name}
-    </h3>
-    <p className="text-indigo-500 dark:text-indigo-400 font-semibold text-base mb-3">
-      {member.role}
-    </p>
-    <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-medium">
-      {member.bio}
-    </p>
-    <div className="mt-4 flex justify-center md:justify-start gap-6 text-indigo-600 dark:text-indigo-400 text-2xl">
-      <a
-        href={member.linkedin}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`${member.name} LinkedIn profile`}
-        className="hover:text-purple-500 dark:hover:text-purple-300 transition-transform duration-300 transform hover:scale-110"
-      >
-        <FaLinkedin />
-      </a>
-    </div>
-  </div>
-</motion.div>
-
+                <motion.div
+                  key={member.name}
+                  {...commonProps}
+                  className={`col-span-full p-6 md:flex md:items-start gap-6 ${commonProps.className}`}
+                >
+                  <div className="relative w-40 h-40 flex-shrink-0 mx-auto md:mx-0 rounded-full overflow-hidden">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-indigo-400 via-sky-400 to-purple-400 opacity-50 blur-xl animate-pulse-slow group-hover:opacity-80 transition-opacity duration-500" />
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      className="relative z-10 object-cover rounded-full border-4 border-white dark:border-zinc-900 shadow-lg"
+                      priority
+                    />
+                  </div>
+                  <div className="mt-6 md:mt-0 text-center md:text-left">
+                    <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">{member.name}</h3>
+                    <p className="text-indigo-500 dark:text-indigo-400 font-semibold text-base mb-3">{member.role}</p>
+                    <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-medium">
+                      {member.bio}
+                    </p>
+                  </div>
+                </motion.div>
               );
             }
 
@@ -261,37 +208,11 @@ export function TeamSection() {
                       priority
                     />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    {member.name}
-                  </h3>
-                  <p className="text-indigo-500 dark:text-indigo-400 font-semibold text-sm mb-3">
-                    {member.role}
-                  </p>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{member.name}</h3>
+                  <p className="text-indigo-500 dark:text-indigo-400 font-semibold text-sm mb-3">{member.role}</p>
                   <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-medium px-4">
                     {member.bio}
                   </p>
-                  <div className="mt-5 flex justify-center gap-6 text-indigo-600 dark:text-indigo-400 text-2xl">
-                    <a
-                      href={member.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${member.name} LinkedIn profile`}
-                      className="hover:text-purple-500 dark:hover:text-purple-300 transition-transform duration-300 transform hover:scale-110"
-                    >
-                      <FaLinkedin />
-                    </a>
-                    {member.github && (
-                      <a
-                        href={member.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`${member.name} GitHub profile`}
-                        className="hover:text-purple-500 dark:hover:text-purple-300 transition-transform duration-300 transform hover:scale-110"
-                      >
-                        <FaGithub />
-                      </a>
-                    )}
-                  </div>
                 </div>
               </motion.div>
             );

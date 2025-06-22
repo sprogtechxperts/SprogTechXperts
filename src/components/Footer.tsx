@@ -174,22 +174,15 @@ export function Footer() {
                 Contact Us
               </h3>
               <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                <div className="flex items-start gap-2">
-                  <Mail className="h-4 w-4" />
-                  <a
-                    href="mailto:sprogtechxperts@gmail.com"
-                    className="hover:text-primary"
-                  >
-                    sprogtechxperts@gmail.com
-                  </a>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Phone className="h-4 w-4" />
-                  <a href="tel:+917841034250" className="hover:text-primary">
-                    +91 78410 34250
-                  </a>
-                </div>
-              </div>
+    <div className="flex items-start gap-2">
+      <Mail className="h-4 w-4" />
+      <span>sprogtechxperts@gmail.com</span>
+    </div>
+    <div className="flex items-start gap-2">
+      <Phone className="h-4 w-4" />
+      <span>+91 78410 34250</span>
+    </div>
+  </div>
               <h3 className="font-headline text-sm font-semibold mb-4 text-foreground">
                 Follow Us
               </h3>
